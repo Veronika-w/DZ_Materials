@@ -100,8 +100,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 AUTH_USER_MODEL = "users.User"
 
-# MAILERS = {
-#     "default": {
-#         "BACKEND": "django.core.mail.backends.console.EmailBackend",
-#     },
-# }
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated",
+    ],
+}
