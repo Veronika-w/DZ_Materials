@@ -21,6 +21,7 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
+    username = None
     email = models.EmailField(
         unique=True,
         verbose_name="электронная почта",

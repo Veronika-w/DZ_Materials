@@ -4,32 +4,34 @@ from rest_framework.fields import SerializerMethodField
 from .models import Course, Lesson
 
 
-class CourseSerializer(serializers.ModelSerializer):
-    lessons = serializers.SerializerMethodField()
-
-    def get_lessons(self, course):
-        return [lesson.title for lesson in Lesson.objects.filter(course=course)]
-
-    class Meta:
-        model = Course
-        fields = "__all__"
-
-
 class LessonSerializer(serializers.ModelSerializer):
-    course = CourseSerializer()
-
     class Meta:
         model = Lesson
         fields = "__all__"
 
 
-class CourseDetailSerializer(serializers.ModelSerializer):
-    count_lessons_in_course = serializers.SerializerMethodField()
-    course = LessonSerializer()
-
-    def get_count_lessons_in_course(self, lesson):
-        return Lesson.objects.filter(course=lesson.course).count()
+class CourseSerializer(serializers.ModelSerializer):
+    lessons = LessonSerializer(many=True, read_only=True, source="lesson_set")
 
     class Meta:
         model = Course
-        fields = ("title", "description", "count_lessons_in_course")
+        fields = ("id", "title", "image", "description", "lessons", "owner")
+
+
+class CourseDetailSerializer(serializers.ModelSerializer):
+    lessons = LessonSerializer(many=True, read_only=True, source="lesson_set")
+    count_lessons_in_course = serializers.SerializerMethodField()
+
+    def get_count_lessons_in_course(self, course):
+        return course.lesson_set.count()
+
+    class Meta:
+        model = Course
+        fields = (
+            "id",
+            "title",
+            "image",
+            "description",
+            "lessons",
+            "count_lessons_in_course",
+        )
