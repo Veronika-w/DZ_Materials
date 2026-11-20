@@ -1,9 +1,12 @@
-from django.urls import path
+from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from users.views import PaymentsViewSet
+from .views import PaymentsViewSet, UserRetrieveUpdateAPIView
 
-app_name = 'users'
+router = DefaultRouter()
+router.register("payments", PaymentsViewSet, basename="payments")
 
 urlpatterns = [
-    path( "payments/<int:pk>/", PaymentsViewSet.as_view(), name="payments_list"),
+    path("me/", UserRetrieveUpdateAPIView.as_view(), name="profile"),
+    path("", include(router.urls)),
 ]

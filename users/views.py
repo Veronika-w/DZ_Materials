@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from users.models import Payments
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, PaymentsSerializer
 
 
 class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
@@ -17,7 +17,8 @@ class UserRetrieveUpdateAPIView(RetrieveUpdateAPIView):
 
 
 class PaymentsViewSet(ModelViewSet):
+    serializer_class = PaymentsSerializer
     queryset = Payments.objects.all()
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     filterset_fields = ('paid_course', 'paid_lesson', 'payment_method',)
-    ordering_fields = ('date_of_payment',)
+    ordering = ["-date_of_payment"]
