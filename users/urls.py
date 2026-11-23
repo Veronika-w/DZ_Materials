@@ -18,13 +18,11 @@ urlpatterns = [
     path("register/", UserCreateAPIView.as_view(), name="register"),
     path("me/", UserRetrieveUpdateAPIView.as_view(), name="profile"),
     path("", include(router.urls)),
-    path(
-        "login/",
+    path("login/",
         TokenObtainPairView.as_view(permission_classes=(AllowAny,)),
         name="login",
     ),
-    path(
-        "token/refresh/",
+    path("token/refresh/",
         TokenRefreshView.as_view(permission_classes=(AllowAny,)),
         name="token_refresh",
     ),
