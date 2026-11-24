@@ -8,12 +8,14 @@ class Command(BaseCommand):
     help = "Add payments to the database"
 
     def handle(self, *args, **options):
-        user = User.objects.get_or_create(email="test@sky.pro", city="Москва")
+        user, _ = User.objects.get_or_create(
+            email="test@sky.pro",
+            defaults={"city": "Москва"},
+        )
         user.is_staff = True
-        user.is_active = True
         user.is_superuser = True
-        user.save()
-        user.set_password("1234")
+        user.is_active = True
+        user.set_password(os.environ["TEST_USER_PASSWORD"])
         user.save()
 
         payments = [

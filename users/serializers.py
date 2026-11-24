@@ -11,15 +11,23 @@ class PaymentsSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    payments = PaymentsSerializer(many=True, read_only=True, source="payments_set")
+    password = serializers.CharField(write_only=True, min_length=8)
+    payments = PaymentsSerializer(many=True,
+                                  read_only=True,
+                                  source="payments_set")
 
     class Meta:
         model = User
         fields = ("id",
             "email",
+            "password",
             "phone",
             "city",
             "avatar",
             "payments")
 
-        read_only_fields = ("id", "email", "payments")
+        read_only_fields = ("id", "payments")
+
+    def create(self, validated_data):
+        password = validated_data.pop("password")
+        return User.objects.create_user(password=password, **validated_data)
