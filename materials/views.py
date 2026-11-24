@@ -15,7 +15,12 @@ from users.permissions import IsModer, IsOwner
 
 class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        if self.request.user.groups.filter(name="moders").exists():
+            return Course.objects.all()
+        return Course.objects.filter(owner=self.request.user)
 
     def get_serializer_class(self):
         if self.action == "retrieve":
