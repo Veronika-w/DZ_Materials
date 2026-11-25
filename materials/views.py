@@ -67,7 +67,7 @@ class LessonCreateApiView(CreateAPIView):
 
 class LessonRetrieveApiView(RetrieveAPIView):
     serializer_class = LessonSerializer
-    # permission_classes = (IsAuthenticated, IsModer | IsOwner)
+    permission_classes = (IsAuthenticated, IsModer | IsOwner)
 
     def get_queryset(self):
         if self.request.user.groups.filter(name="moders").exists():

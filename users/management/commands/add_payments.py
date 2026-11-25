@@ -1,3 +1,4 @@
+import os
 from django.contrib.auth.base_user import AbstractBaseUser
 from django.core.management.base import BaseCommand
 
